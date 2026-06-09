@@ -11,9 +11,9 @@ source:
   sha256: ed374f89b385ef066cf2339db7dd9edc13cf74f0552ce8c5e265ab7130ae4007
 
 build:
+  number: 1
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-  number: 0
 
 requirements:
   host:
@@ -37,6 +37,20 @@ test:
     - pip
   commands:
     - pip check
+
+outputs:
+  - name: {{ name }}
+
+  - name: {{ name }}-all
+    build:
+      noarch: python
+    requirements:
+      run:
+        - {{ pin_subpackage(name, exact=True) }}
+        - pyramids-lazy >=0.32.0
+    test:
+      imports:
+        - digitalrivers
 
 about:
   home: https://github.com/serapeum-org/digital-rivers
